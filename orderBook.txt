@@ -1,0 +1,55 @@
+function reconcileOrder(existingBook, incomingOrder) {
+  let updatedBook = [];
+
+  if (existingBook.length === 0) {
+    updatedBook = updatedBook.concat(incomingOrder);
+
+    return updatedBook;
+  }
+
+  for (let i = 0; i < existingBook.length; i++) {
+    if (existingBook[i].type === incomingOrder.type) {
+      updatedBook = existingBook.push(incomingOrder);
+    }
+
+    if (
+      existingBook[i].type !== incomingOrder.type &&
+      (existingBook[i].quantity !== incomingOrder.quantity ||
+        existingBook[i].price !== incomingOrder.price)
+    ) {
+      updatedBook = existingBook.push(incomingOrder);
+    } else if (
+      existingBook[i].type !== incomingOrder.type &&
+      existingBook[i].quantity === incomingOrder.quantity &&
+      existingBook[i].price === incomingOrder.price
+    ) {
+      incomingOrder = existingBook[i];
+      updatedBook = existingBook.shift(incomingOrder);
+    } else if (
+      existingBook[i].price !== incomingOrder.price &&
+      existingBook[i].quantity === incomingOrder.quantity &&
+      existingBook[i].type === incomingOrder.type
+    ) {
+      updatedBook = updatedBook.shift(existingBook);
+    } else if (
+      existingBook[i].type !== incomingOrder.type &&
+      existingBook[i].price === incomingOrder.price
+    ) {
+      if (existingBook[i].quantity > incomingOrder.quantity) {
+        incomingOrder.quantity =
+          existingBook[i].quantity - incomingOrder.quantity;
+        incomingOrder.type = existingBook[i].type;
+        updatedBook = existingBook.concat(incomingOrder);
+      } else if (existingBook[i].quantity < incomingOrder.quantity) {
+        incomingOrder.quantity =
+          incomingOrder.quantity - existingBook[i].quantity;
+        incomingOrder.type = existingBook[i].type;
+        updatedBook = existingBook.push(existingBook[i]);
+      }
+    }
+  }
+
+  return updatedBook;
+}
+
+module.exports = reconcileOrder;
