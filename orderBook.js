@@ -1,14 +1,14 @@
 function reconcileOrder(existingBook, incomingOrder) {
-  let updatedBook = [];
+  let updatedBook = []
 
   if (existingBook === 0) {
-    updatedBook = existingBook.push(incomingOrder);
+    updatedBook = existingBook.push(incomingOrder)
 
-    return updatedBook;
+    return updatedBook
   }
 
   while (existingBook.length > 0 && incomingOrder.quantity > 0) {
-    const currentOrder = existingBook.shift();
+    const currentOrder = existingBook.shift()
 
     if (
       currentOrder.type !== incomingOrder.type &&
@@ -19,25 +19,25 @@ function reconcileOrder(existingBook, incomingOrder) {
           type: incomingOrder.type,
           price: incomingOrder.price,
           quantity: incomingOrder.quantity - currentOrder.quantity,
-        };
+        }
       } else {
         incomingOrder = {
           type: currentOrder.type,
           price: currentOrder.price,
           quantity: currentOrder.quantity - incomingOrder.quantity,
-        };
+        }
       }
     } else {
-      updatedBook.push(currentOrder);
+      updatedBook.push(currentOrder)
     }
   }
   if (existingBook.length > 0) {
-    updatedBook = updatedBook.concat(existingBook);
+    updatedBook = updatedBook.concat(existingBook)
   }
   if (incomingOrder.quantity > 0) {
-    updatedBook.push(incomingOrder);
+    updatedBook.push(incomingOrder)
   }
 
-  return updatedBook;
+  return updatedBook
 }
-module.exports = reconcileOrder;
+module.exports = reconcileOrder
